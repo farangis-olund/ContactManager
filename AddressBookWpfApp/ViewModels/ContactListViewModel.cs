@@ -14,17 +14,18 @@ public partial class ContactListViewModel : ObservableObject
     private readonly IContactService _contactService;
 
     [ObservableProperty]
+    private ObservableCollection<Contact> _contactList;
+
+    [ObservableProperty]
     private Contact _selectedContact;
    
-    [ObservableProperty]
-    private ObservableCollection<Contact> _contactList = [];
-
-    public ContactListViewModel(IServiceProvider serviceProvider, IContactService contactService, Contact selectedContact)
+    public ContactListViewModel(IServiceProvider serviceProvider, IContactService contactService, Contact selectedContact, ObservableCollection<Contact> contactList)
     {
         _serviceProvider = serviceProvider;
         _contactService = contactService;
         _ = LoadContacts();
         _selectedContact = selectedContact;
+        _contactList = contactList;
 
     }
 
@@ -35,7 +36,6 @@ public partial class ContactListViewModel : ObservableObject
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ContactAddViewModel>();
     }
 
-
     [RelayCommand]
     private void NavigateToUpdateContact()
     {
@@ -43,19 +43,11 @@ public partial class ContactListViewModel : ObservableObject
         {
             var contactUpdateViewModel = _serviceProvider.GetRequiredService<ContactUpdateViewModel>();
             contactUpdateViewModel.UpdateSelectedContact(SelectedContact);
+            
             var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
             mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ContactUpdateViewModel>(); 
         
         }
-
-
-    }
-
-    [RelayCommand]
-    public async Task LoadContacts()
-    {
-        var contacts = await _contactService.GetAllContactsAsync();
-        ContactList = new ObservableCollection<Contact>(contacts);
     }
 
     [RelayCommand]
@@ -70,6 +62,15 @@ public partial class ContactListViewModel : ObservableObject
             }
         }
     }
-
+    public void UpdateContactList(ObservableCollection<Contact> contactList)
+    {
+        ContactList = contactList;
+        OnPropertyChanged(nameof(ContactList));
+    }
+    private async Task LoadContacts()
+    {
+        var contacts = await _contactService.GetAllContactsAsync();
+        ContactList = new ObservableCollection<Contact>(contacts);
+    }
 
 }

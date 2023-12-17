@@ -3,6 +3,8 @@ using AddressBookLibrary.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 
 namespace AddressBookWpfApp.ViewModels;
@@ -10,34 +12,44 @@ namespace AddressBookWpfApp.ViewModels;
 public partial class ContactUpdateViewModel : ObservableObject
 {
     [ObservableProperty]
-    private Contact _contact = new();
+    private Contact _selectedContact;
 
     [ObservableProperty]
-    private Contact _selectedContact;
+    private ObservableCollection<Contact> _contactList;
 
     private readonly IServiceProvider _serviceProvider;
     private readonly IContactService _contactService;
 
-    public ContactUpdateViewModel(IServiceProvider serviceProvider, IContactService contactService, Contact selectedContact)
+    public ContactUpdateViewModel(IServiceProvider serviceProvider, IContactService contactService, Contact selectedContact, ObservableCollection<Contact> contactList)
     {
-        _selectedContact = selectedContact;
         _serviceProvider = serviceProvider;
         _contactService = contactService;
+        _contactList = contactList;
+        _selectedContact = selectedContact;
 
     }
-
 
     [RelayCommand]
     private async Task UpdateContact()
     {
-        if (SelectedContact != null)
+        try
         {
-            var result = await _contactService.UpdateContactAsync(SelectedContact);
-            if (result)
+            if (SelectedContact != null)
             {
-                NavigateToContactList();
+                var result = await _contactService.UpdateContactAsync(SelectedContact);
+                if (result)
+                {
+                    var contacts = await _contactService.GetAllContactsAsync();
+                    ContactList = new ObservableCollection<Contact>(contacts);
+                    NavigateToContactList();
+                }
             }
         }
+        catch (Exception ex) 
+        { 
+            Debug.WriteLine(ex.Message); 
+        }
+        
     }
 
     [RelayCommand]
@@ -49,8 +61,12 @@ public partial class ContactUpdateViewModel : ObservableObject
 
     public void UpdateSelectedContact(Contact selectedContact)
     {
-        SelectedContact = selectedContact;
-        OnPropertyChanged(nameof(SelectedContact));
+        if (selectedContact != null)
+        {
+            SelectedContact = selectedContact;
+            OnPropertyChanged(nameof(SelectedContact));
+        }
+       
     }
 
 }

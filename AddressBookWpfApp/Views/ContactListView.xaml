@@ -19,11 +19,10 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
-            <Button Content="Add" Width="50" Height="40" Command="{Binding NavigateToAddContactCommand}" Margin="2"/>
-            <Button Content="Refresh" Width="50" Height="40" Command="{Binding LoadContactsCommand}" Margin="2"/>
-            <Button Content="Details" Width="50" Height="40" Margin="2"/>
-            <Button Content="Update" Width="50" Height="40" Command="{Binding NavigateToUpdateContactCommand}" Margin="2"/>
-            <Button Content="Delete" Width="50" Height="40" Command="{Binding DeleteContactCommand}" Margin="2"/>
+            <Button Content="Add" Width="60" Height="40" Command="{Binding NavigateToAddContactCommand}" Margin="5"/>
+            <Button Content="Details" Width="60" Height="40" Margin="5"/>
+            <Button Content="Update" Width="60" Height="40" Command="{Binding NavigateToUpdateContactCommand}" Margin="5"/>
+            <Button Content="Delete" Width="60" Height="40" Command="{Binding DeleteContactCommand}" Margin="5"/>
         </StackPanel>
 
         <ListView Grid.Row="2" ItemsSource="{Binding ContactList}" SelectedItem="{Binding SelectedContact}" HorizontalContentAlignment="Stretch">

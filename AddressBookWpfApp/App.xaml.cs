@@ -5,6 +5,7 @@ using AddressBookWpfApp.ViewModels;
 using AddressBookWpfApp.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace AddressBookWpfApp;
@@ -36,9 +37,8 @@ public partial class App : Application
         
                 services.AddSingleton<IContactService, ContactService>();
                 services.AddSingleton<IFileService, FileService>();
-              
-
-
+                services.AddSingleton<ObservableCollection<Contact>>();
+            
             }).Build();
     }
 
