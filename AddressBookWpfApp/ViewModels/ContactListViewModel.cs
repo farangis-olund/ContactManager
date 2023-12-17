@@ -83,7 +83,7 @@ public partial class ContactListViewModel : ObservableObject
             ContactList = contactList;
         OnPropertyChanged(nameof(ContactList));
     }
-    private async Task LoadContacts()
+    public async Task LoadContacts()
     {
         var contacts = await _contactService.GetAllContactsAsync();
         ContactList = new ObservableCollection<Contact>(contacts);
