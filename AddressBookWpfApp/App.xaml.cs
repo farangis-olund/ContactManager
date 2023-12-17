@@ -21,15 +21,22 @@ public partial class App : Application
                 services.AddSingleton<MainWindow>();
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<Contact>();
+                
                 services.AddSingleton<ContactListViewModel>();
                 services.AddSingleton<ContactListView>();
+
                 services.AddSingleton<ContactAddViewModel>();
+                services.AddSingleton<ContactAddView>();
+
                 services.AddSingleton<ContactDetailsViewModel>();
                 services.AddSingleton<ContactDetailsView>();
-                services.AddSingleton<ContactAddView>();
+
+                services.AddSingleton<ContactUpdateViewModel>();
+                services.AddSingleton<ContactUpdateView>();
+        
                 services.AddSingleton<IContactService, ContactService>();
                 services.AddSingleton<IFileService, FileService>();
-                services.AddSingleton<Contact>();
+              
 
 
             }).Build();

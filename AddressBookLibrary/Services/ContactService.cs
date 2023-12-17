@@ -34,6 +34,7 @@ namespace AddressBookLibrary.Services
                 if (contactToRemove != null)
                 {
                     _contacts.Remove(contactToRemove);
+                    _fileService.WriteToJsonFile(_contacts, filePath);
                 }
 
                 return await Task.FromResult(true);

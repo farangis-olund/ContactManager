@@ -8,7 +8,7 @@
         xmlns:views="clr-namespace:AddressBookWpfApp.Views" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
        
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="500">
+        Title="MainWindow" Height="600" Width="300">
     <Grid>
         <ContentControl Content="{Binding CurrentViewModel}">
             <ContentControl.Resources>
@@ -21,6 +21,10 @@
                     <views:ContactAddView/>
                 </DataTemplate>
 
+                <DataTemplate DataType="{x:Type viewmodels:ContactUpdateViewModel}">
+                    <views:ContactUpdateView/>
+                </DataTemplate>
+                
             </ContentControl.Resources>
         </ContentControl>
     </Grid>
