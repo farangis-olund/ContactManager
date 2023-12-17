@@ -18,10 +18,10 @@
 
         <StackPanel Grid.Row="1" Margin="0,0,0,20">
 
-            <Label Content="ADD CONTACT" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold"/>
+            <Label Content="ADD CONTACT" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
             <Label>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="First Name "/>
+                    <TextBlock Text="First Name " Foreground="Gray"/>
                     <TextBlock Text="*" Foreground="Red"/>
                 </StackPanel>
             </Label>
@@ -30,7 +30,7 @@
 
             <Label>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Last Name "/>
+                    <TextBlock Text="Last Name " Foreground="Gray"/>
                     <TextBlock Text="*" Foreground="Red"/>
                 </StackPanel>
             </Label>
@@ -38,16 +38,16 @@
 
             <Label>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Email "/>
+                    <TextBlock Text="Email " Foreground="Gray"/>
                     <TextBlock Text="*" Foreground="Red"/>
                 </StackPanel>
             </Label>
             <TextBox Text="{Binding Contact.Email}" Padding="2,5"/>
 
-            <Label Content="Telphone number"/>
+            <Label Content="Telphone number"  Foreground="Gray"/>
             <TextBox Text="{Binding Contact.PhoneNumber}" Padding="2,5"/>
 
-            <Label Content="Address"/>
+            <Label Content="Address" Foreground="Gray"/>
             <TextBox Text="{Binding Contact.Address}" Padding="2,5"/>
             <Button Content="Add" Command="{Binding AddContactToListCommand}" Padding="5,8" Margin="0,20,0,0"/>
 

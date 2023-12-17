@@ -26,6 +26,68 @@ namespace AddressBookLibrary.Services
             
         }
 
+
+        public async Task<Contact> GetContactByEmailAsync(string email)
+        {
+            try
+            {
+                var contact = _contacts.FirstOrDefault(x => x.Email == email);
+                if (contact != null)
+                {
+                    return contact;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            await Task.Yield();
+            return null!;
+
+        }
+
+        public async Task<List<Contact>> GetAllContactsAsync()
+        {
+            try
+            {
+                if (_contacts.Count == 0)
+                {
+                    _contacts = await GetAllContactsFromFileToList();
+                }
+                await Task.Yield();
+                return _contacts;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return [];
+            }
+        }
+                       
+        public async Task<bool> UpdateContactAsync(Contact contact)
+        {
+            try
+            {
+                var existingContact = _contacts.FirstOrDefault(c => c.Id == contact.Id);
+                if (existingContact != null)
+                {
+                    existingContact.FirstName = contact.FirstName;
+                    existingContact.LastName = contact.LastName;
+                    existingContact.Email = contact.Email;
+                    existingContact.PhoneNumber = contact.PhoneNumber;
+                    existingContact.Address = contact.Address;
+                }
+                _fileService.WriteToJsonFile(_contacts, filePath);
+                return await Task.FromResult(true);
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return await Task.FromResult(false);
+            }
+        }
+
         public async Task<bool> DeleteContactByEmailAsync(string email)
         {
             try
@@ -44,72 +106,10 @@ namespace AddressBookLibrary.Services
                 Debug.WriteLine(ex.Message);
                 return await Task.FromResult(false);
             }
-    
+
         }
 
-        public async Task<List<Contact>> GetAllContactsAsync()
-        {
-            try
-            {
-                
-                if (_contacts.Count == 0)
-                {
-                    List<Contact> contacts = await GetAllContactsFromFileToList();
-                    _contacts = contacts;
-                }
-                await Task.Yield();
-                return _contacts;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                return null!;
-            }
-        }
-
-        public async Task<Contact> GetContactByEmailAsync(string email)
-        {
-            try
-            {
-                var contact = _contacts.FirstOrDefault(x => x.Email == email);
-                if (contact != null)
-                {
-                    return contact;
-                }
-             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            await Task.Yield();
-            return null!;
-  
-        }
-
-        public async Task<bool> UpdateContactAsync(Contact contact)
-        {
-            try
-            {
-                var existingContact = _contacts.FirstOrDefault(c => c.Id == contact.Id);
-                if (existingContact != null)
-                {
-                    existingContact.FirstName = contact.FirstName;
-                    existingContact.LastName = contact.LastName;
-                    existingContact.Email = contact.Email;
-                    existingContact.PhoneNumber = contact.PhoneNumber;
-                    existingContact.Address = contact.Address;
-                }
-                return await Task.FromResult(true);
-
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return await Task.FromResult(false);
-            }
-        }
-
-        private async Task<List<Contact>> GetAllContactsFromFileToList()
+        public async Task<List<Contact>> GetAllContactsFromFileToList()
         {
             try
             {
@@ -121,10 +121,9 @@ namespace AddressBookLibrary.Services
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                return null!;
+                return [];
             }
            
         }
-
     }
 }

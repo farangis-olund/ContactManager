@@ -25,7 +25,7 @@ namespace AddressBookLibrary.Services
             {
                 Debug.WriteLine(ex);
             }
-            return new List<IContact>();
+            return Enumerable.Empty<Contact>();
         }
 
         public bool WriteToJsonFile(IEnumerable<IContact> data, string filePath)

@@ -46,6 +46,5 @@ public partial class ContactAddViewModel(IServiceProvider serviceProvider, ICont
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ContactListViewModel>();
     }
-
-
+   
 }

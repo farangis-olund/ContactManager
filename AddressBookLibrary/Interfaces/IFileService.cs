@@ -1,4 +1,6 @@
-﻿namespace AddressBookLibrary.Interfaces
+﻿using AddressBookLibrary.Models;
+
+namespace AddressBookLibrary.Interfaces
 {
     public interface IFileService
     {

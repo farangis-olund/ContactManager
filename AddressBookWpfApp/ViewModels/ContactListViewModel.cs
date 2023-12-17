@@ -63,7 +63,6 @@ public partial class ContactListViewModel : ObservableObject
         }
     }
 
-
     [RelayCommand]
     private async Task DeleteContact()
     {
@@ -78,7 +77,10 @@ public partial class ContactListViewModel : ObservableObject
     }
     public void UpdateContactList(ObservableCollection<Contact> contactList)
     {
-        ContactList = contactList;
+        if (contactList == null || (contactList.Count == 1 && string.IsNullOrEmpty(contactList[0]?.FirstName)))
+            _ = LoadContacts();
+        else
+            ContactList = contactList;
         OnPropertyChanged(nameof(ContactList));
     }
     private async Task LoadContacts()
