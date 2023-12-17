@@ -4,26 +4,21 @@ using AddressBookLibrary.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.ObjectModel;
 
 namespace AddressBookWpfApp.ViewModels;
 
 public partial class ContactDetailsViewModel : ObservableObject
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly IContactService _contactService;
-    
+           
     [ObservableProperty]
-    private Contact _contact = new();
-    public ContactDetailsViewModel(IServiceProvider serviceProvider, IContactService contactService)
+    private Contact _selectedContact;
+    
+    public ContactDetailsViewModel(IServiceProvider serviceProvider, Contact selectedContact)
     {
         _serviceProvider = serviceProvider;
-        _contactService = contactService;
-    }
-
-    [RelayCommand]
-    public void UpdateContactToList()
-    {
-        _contactService.UpdateContactAsync(Contact);         
+        _selectedContact = selectedContact;
     }
 
     [RelayCommand]
@@ -31,6 +26,16 @@ public partial class ContactDetailsViewModel : ObservableObject
     {
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ContactListViewModel>();
+    }
+
+    public void UpdateSelectedContact(Contact selectedContact)
+    {
+        if (selectedContact != null)
+        {
+            SelectedContact = selectedContact;
+            OnPropertyChanged(nameof(SelectedContact));
+        }
+
     }
 
 }

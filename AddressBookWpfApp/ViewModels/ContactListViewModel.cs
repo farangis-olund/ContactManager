@@ -26,7 +26,6 @@ public partial class ContactListViewModel : ObservableObject
         _ = LoadContacts();
         _selectedContact = selectedContact;
         _contactList = contactList;
-
     }
 
     [RelayCommand]
@@ -49,6 +48,21 @@ public partial class ContactListViewModel : ObservableObject
         
         }
     }
+
+    [RelayCommand]
+    private void NavigateToDetailsContact()
+    {
+        if (SelectedContact != null)
+        {
+            var contactDetailsViewModel = _serviceProvider.GetRequiredService<ContactDetailsViewModel>();
+            contactDetailsViewModel.UpdateSelectedContact(SelectedContact);
+
+            var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
+            mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ContactDetailsViewModel>();
+
+        }
+    }
+
 
     [RelayCommand]
     private async Task DeleteContact()

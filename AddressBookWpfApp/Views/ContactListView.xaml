@@ -15,14 +15,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
-            <Label Grid.Row="0" Content="CONTACT DATABASE" HorizontalContentAlignment="Center" FontWeight="Bold" Margin="0,0,0,10"/>
+            <Label Grid.Row="0" Content="CONTACT BOOK" HorizontalContentAlignment="Center" FontWeight="Bold" Margin="0,0,0,10"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
-            <Button Content="Add" Width="60" Height="40" Command="{Binding NavigateToAddContactCommand}" Margin="5"/>
-            <Button Content="Details" Width="60" Height="40" Margin="5"/>
-            <Button Content="Update" Width="60" Height="40" Command="{Binding NavigateToUpdateContactCommand}" Margin="5"/>
-            <Button Content="Delete" Width="60" Height="40" Command="{Binding DeleteContactCommand}" Margin="5"/>
+            <Button Content="Add" Width="60" Height="35" Command="{Binding NavigateToAddContactCommand}" Margin="5"/>
+            <Button Content="Details" Width="60" Height="35" Command="{Binding NavigateToDetailsContactCommand}" Margin="5"/>
+            <Button Content="Update" Width="60" Height="35" Command="{Binding NavigateToUpdateContactCommand}" Margin="5"/>
+            <Button Content="Delete" Width="60" Height="35" Command="{Binding DeleteContactCommand}" Margin="5"/>
         </StackPanel>
 
         <ListView Grid.Row="2" ItemsSource="{Binding ContactList}" SelectedItem="{Binding SelectedContact}" HorizontalContentAlignment="Stretch">
@@ -32,28 +32,20 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <!-- First Column -->
                         <StackPanel Grid.Column="0" >
                             <!-- First Name -->
                             <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                <TextBlock Text="First Name: " FontWeight="Bold"/>
-                                <TextBlock Text="{Binding FirstName}"/>
+                                <TextBlock Text="{Binding FirstName}" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text=" "/>
+                                <TextBlock Text="{Binding LastName}" FontWeight="Bold" FontSize="14"/>
                             </StackPanel>
-
-                            <!-- Last Name  -->
-                            <StackPanel Grid.Column="1" Margin="0,10,0,0" Orientation="Horizontal">
-                                <TextBlock Text="Last Name: " FontWeight="Bold"/>
-                                <TextBlock Text="{Binding LastName}"/>
-                            </StackPanel>
-                            
+ 
                             <!-- Email  -->
-                            <StackPanel Grid.Column="2" Margin="0,10,0,0" Orientation="Horizontal">
-                                <TextBlock Text="Email: " FontWeight="Bold"/>
-                                <TextBlock Text="{Binding Email}"/>
+                            <StackPanel Grid.Column="1" Margin="0,5,0,0" Orientation="Horizontal">
+                                  <TextBlock Text="{Binding Email}" />
                             </StackPanel>
 
                         </StackPanel>
@@ -62,8 +54,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
-
     </Grid>
 
 </UserControl>

@@ -33,7 +33,7 @@ public partial class ContactAddViewModel(IServiceProvider serviceProvider, ICont
             }
         } else 
         {
-            MessageBox.Show("Please add required fields");
+            MessageBox.Show("Please enter all required fields and then Add Contact!");
         }
     }
     

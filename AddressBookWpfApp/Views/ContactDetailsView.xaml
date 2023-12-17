@@ -7,36 +7,34 @@
              xmlns:viewmodels="clr-namespace:AddressBookWpfApp.ViewModels"
              xmlns:views="clr-namespace:AddressBookWpfApp.Views" d:DataContext="{d:DesignInstance Type=viewmodels:ContactDetailsViewModel}"
               mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="500">
+             d:DesignHeight="600" d:DesignWidth="300">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        
+        <Button Grid.Row="0" Content="Back To Menu" Command="{Binding NavigateToContactListCommand}" Padding="5,8" Margin="0,5,0,10"/>
+
         <StackPanel Grid.Row="1" Margin="0,0,0,20">
 
             <Label Content="CONTACT DETAILS" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold"/>
             <Label Content="First Name"/>
-            <TextBox Text="{Binding Contact.FirstName}" Padding="2,5"/>
+            <TextBox Text="{Binding SelectedContact.FirstName}" Padding="2,5" IsReadOnly="True"/>
 
             <Label Content="Last Name"/>
-            <TextBox Text="{Binding Contact.LastName}" Padding="2,5"/>
+            <TextBox Text="{Binding SelectedContact.LastName}" Padding="2,5" IsReadOnly="True"/>
 
             <Label Content="Email"/>
-            <TextBox Text="{Binding Contact.Email}" Padding="2,5"/>
+            <TextBox Text="{Binding SelectedContact.Email}" Padding="2,5" IsReadOnly="True"/>
 
             <Label Content="Telphone number"/>
-            <TextBox Text="{Binding Contact.PhoneNumber}" Padding="2,5"/>
+            <TextBox Text="{Binding SelectedContact.PhoneNumber}" Padding="2,5" IsReadOnly="True"/>
 
             <Label Content="Address"/>
-            <TextBox Text="{Binding Contact.Address}" Padding="2,5"/>
-            <Button Content="Add Contact" Command="{Binding AddContactToListCommand}" Padding="5,8" Margin="0,20,0,0"/>
-
+            <TextBox Text="{Binding SelectedContact.Address}" Padding="2,5" IsReadOnly="True"/>
+         
         </StackPanel>
-
-
     </Grid>
 
 </UserControl>
