@@ -12,21 +12,25 @@ public partial class ContactListViewModel : ObservableObject
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IContactService _contactService;
-
-    [ObservableProperty]
-    private ObservableCollection<Contact> _contactList;
-
-    [ObservableProperty]
-    private Contact _selectedContact;
-   
-    public ContactListViewModel(IServiceProvider serviceProvider, IContactService contactService, Contact selectedContact, ObservableCollection<Contact> contactList)
+    
+    public ContactListViewModel(IServiceProvider serviceProvider, 
+                                IContactService contactService, 
+                                Contact selectedContact, 
+                                ObservableCollection<Contact> contactList)
     {
         _serviceProvider = serviceProvider;
         _contactService = contactService;
         _ = LoadContacts();
         _selectedContact = selectedContact;
         _contactList = contactList;
+        
     }
+
+    [ObservableProperty]
+    private ObservableCollection<Contact> _contactList;
+
+    [ObservableProperty]
+    private Contact _selectedContact;
 
     [RelayCommand]
     private void NavigateToAddContact()
@@ -34,34 +38,12 @@ public partial class ContactListViewModel : ObservableObject
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ContactAddViewModel>();
     }
+       
+    [RelayCommand]
+    public void NavigateToDetailsContact() => NavigateToViewModel<ContactDetailsViewModel>();
 
     [RelayCommand]
-    private void NavigateToUpdateContact()
-    {
-        if (SelectedContact != null)
-        {
-            var contactUpdateViewModel = _serviceProvider.GetRequiredService<ContactUpdateViewModel>();
-            contactUpdateViewModel.UpdateSelectedContact(SelectedContact);
-            
-            var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-            mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ContactUpdateViewModel>(); 
-        
-        }
-    }
-
-    [RelayCommand]
-    private void NavigateToDetailsContact()
-    {
-        if (SelectedContact != null)
-        {
-            var contactDetailsViewModel = _serviceProvider.GetRequiredService<ContactDetailsViewModel>();
-            contactDetailsViewModel.UpdateSelectedContact(SelectedContact);
-
-            var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-            mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ContactDetailsViewModel>();
-
-        }
-    }
+    public void NavigateToUpdateContact() => NavigateToViewModel<ContactUpdateViewModel>();
 
     [RelayCommand]
     private async Task DeleteContact()
@@ -71,18 +53,23 @@ public partial class ContactListViewModel : ObservableObject
             var result = await _contactService.DeleteContactByEmailAsync(SelectedContact.Email);
             if (result)
             {
-                _ = LoadContacts();
+                await LoadContacts();
             }
         }
     }
-    public void UpdateContactList(ObservableCollection<Contact> contactList)
+    
+    private void NavigateToViewModel<T>() where T : class
     {
-        if (contactList == null || (contactList.Count == 1 && string.IsNullOrEmpty(contactList[0]?.FirstName)))
-            _ = LoadContacts();
-        else
-            ContactList = contactList;
-        OnPropertyChanged(nameof(ContactList));
+        if (SelectedContact != null)
+        {
+            var viewModel = _serviceProvider.GetRequiredService<T>() as ObservableObject;
+            viewModel?.GetType().GetProperty("SelectedContact")?.SetValue(viewModel, SelectedContact);
+
+            var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
+            mainViewModel.CurrentViewModel = viewModel;
+        }
     }
+
     public async Task LoadContacts()
     {
         var contacts = await _contactService.GetAllContactsAsync();

@@ -46,15 +46,16 @@ namespace AddressBookLibrary.Services
 
         }
 
-        public async Task<List<Contact>> GetAllContactsAsync()
+        public async Task<IEnumerable<Contact>> GetAllContactsAsync()
         {
             try
             {
                 if (_contacts.Count == 0)
                 {
-                    _contacts = await GetAllContactsFromFileToList();
+                    var contacts = await GetAllContactsFromFileToList();
+                    _contacts = contacts.ToList();
                 }
-                await Task.Yield();
+                
                 return _contacts;
             }
             catch (Exception ex)
@@ -109,21 +110,27 @@ namespace AddressBookLibrary.Services
 
         }
 
-        public async Task<List<Contact>> GetAllContactsFromFileToList()
+        public async Task<IEnumerable<Contact>> GetAllContactsFromFileToList()
         {
             try
             {
-                _contacts.AddRange((IEnumerable<Contact>)_fileService.ReadFromJsonFile(filePath));
+                if (_fileService.ReadFromJsonFile(filePath) is IEnumerable<Contact> contactsFromFile)
+                {
+                    _contacts.AddRange(contactsFromFile);
+                }
+                else
+                {
+                    Debug.WriteLine("Error: Unable to read contacts from the file.");
+                }
+
                 await Task.Yield();
                 return _contacts;
-
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
-                return [];
+                Debug.WriteLine($"Exception occurred: {ex}");
+                return Enumerable.Empty<Contact>();
             }
-           
         }
     }
 }

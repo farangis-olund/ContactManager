@@ -29,7 +29,7 @@ namespace AddressBookLibrary.Interfaces
         /// A task representing the list of contacts. If an error occurs,
         /// an empty list is returned.
         /// </returns>
-        Task<List<Contact>> GetAllContactsAsync();
+        Task<IEnumerable<Contact>> GetAllContactsAsync();
 
         /// <summary>
         /// Updates an existing contact asynchronously with the provided contact information.
@@ -56,7 +56,7 @@ namespace AddressBookLibrary.Interfaces
         /// A task representing the list of contacts retrieved from the file. 
         /// If an error occurs, returns null.
         /// </returns>
-        Task<List<Contact>> GetAllContactsFromFileToList();
+        Task<IEnumerable<Contact>> GetAllContactsFromFileToList();
 
 
     }

@@ -8,7 +8,7 @@
             
              d:DataContext="{d:DesignInstance Type=viewmodels:ContactUpdateViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="300">
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -35,7 +35,8 @@
 
             <Label Content="Address"/>
             <TextBox Text="{Binding SelectedContact.Address}" Padding="2,5"/>
-            <Button Content="Update" Command="{Binding UpdateContactCommand}" Padding="5,8" Margin="0,20,0,0"/>
+            
+            <Button Content="Update" Command="{Binding UpdateContactCommand}" Padding="5,8" Margin="0,15,0,5"/>
 
         </StackPanel>
 

@@ -2,6 +2,7 @@
 using AddressBookLibrary.Models;
 using AddressBookLibrary.Services;
 using Moq;
+using System.Collections.Generic;
 
 namespace AddressBookLibrary.Tests;
 
@@ -189,8 +190,8 @@ public class ContactService_Test
 
         // Assert
         Assert.NotNull(result);
-        Assert.IsType<List<Contact>>(result);
-        Assert.Equal(2, result.Count); 
+        _ = Assert.IsAssignableFrom<IEnumerable<Contact>>(result);
+        Assert.Equal(2, result.ToList().Count); 
 
        _fileServiceMock.Verify(fs => fs.ReadFromJsonFile(filePath), Times.Once);
     }
