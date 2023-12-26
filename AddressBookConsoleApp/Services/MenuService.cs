@@ -159,7 +159,7 @@ public class MenuService : IMenuService
        
             if (result.Result is List<Contact> contact)
             {
-                if (!contact.Any())
+                if (contact.Count == 0)
                 {
                     _consoleService.WriteLine($"There is no any contact in the list.");
                 }

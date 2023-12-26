@@ -34,13 +34,14 @@ public class ContactService (IFileService fileService) : IContactService
             var contact = _contacts.FirstOrDefault(x => x.Email == email);
             if (contact != null)
             {
-                return contact;
+               return contact;
             }
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
         }
+
         await Task.Yield();
         return null!;
 
