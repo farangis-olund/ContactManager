@@ -1,5 +1,4 @@
-﻿using AddressBookLibrary.Models;
-
+﻿
 namespace AddressBookLibrary.Interfaces
 {
     public interface IFileService

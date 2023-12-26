@@ -2,135 +2,134 @@
 using AddressBookLibrary.Models;
 using System.Diagnostics;
 
-namespace AddressBookLibrary.Services
-{
-    public class ContactService (IFileService fileService) : IContactService
-    {
-        private List<Contact> _contacts = [];
-        private readonly IFileService _fileService = fileService;
-        private readonly string filePath = @"C:\projects\contacts.json";
+namespace AddressBookLibrary.Services;
 
-        public async Task<bool> AddContactAsync(Contact contact)
+public class ContactService (IFileService fileService) : IContactService
+{
+    private List<Contact> _contacts = [];
+    private readonly IFileService _fileService = fileService;
+    private readonly string filePath = @"C:\projects\contacts.json";
+
+    public async Task<bool> AddContactAsync(Contact contact)
+    {
+        try
         {
-            try
+            _contacts.Add(contact);
+            _fileService.WriteToJsonFile(_contacts, filePath);
+            return await Task.FromResult(true);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);    
+            return await Task.FromResult(false);
+        }
+        
+    }
+
+
+    public async Task<Contact> GetContactByEmailAsync(string email)
+    {
+        try
+        {
+            var contact = _contacts.FirstOrDefault(x => x.Email == email);
+            if (contact != null)
             {
-                _contacts.Add(contact);
-                _fileService.WriteToJsonFile(_contacts, filePath);
-                return await Task.FromResult(true);
+                return contact;
             }
-            catch (Exception ex)
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+        await Task.Yield();
+        return null!;
+
+    }
+
+    public async Task<IEnumerable<Contact>> GetAllContactsAsync()
+    {
+        try
+        {
+            if (_contacts.Count == 0)
             {
-                Debug.WriteLine(ex.Message);    
-                return await Task.FromResult(false);
+                var contacts = await GetAllContactsFromFileToList();
+                _contacts = contacts.ToList();
             }
             
+            return _contacts;
         }
-
-
-        public async Task<Contact> GetContactByEmailAsync(string email)
+        catch (Exception ex)
         {
-            try
+            Debug.WriteLine(ex.Message);
+            return [];
+        }
+    }
+                   
+    public async Task<bool> UpdateContactAsync(Contact contact)
+    {
+        try
+        {
+            var existingContact = _contacts.FirstOrDefault(c => c.Id == contact.Id);
+            if (existingContact != null)
             {
-                var contact = _contacts.FirstOrDefault(x => x.Email == email);
-                if (contact != null)
-                {
-                    return contact;
-                }
+                existingContact.FirstName = contact.FirstName;
+                existingContact.LastName = contact.LastName;
+                existingContact.Email = contact.Email;
+                existingContact.PhoneNumber = contact.PhoneNumber;
+                existingContact.Address = contact.Address;
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            await Task.Yield();
-            return null!;
+            _fileService.WriteToJsonFile(_contacts, filePath);
+            return await Task.FromResult(true);
 
         }
-
-        public async Task<IEnumerable<Contact>> GetAllContactsAsync()
+        catch (Exception ex)
         {
-            try
-            {
-                if (_contacts.Count == 0)
-                {
-                    var contacts = await GetAllContactsFromFileToList();
-                    _contacts = contacts.ToList();
-                }
-                
-                return _contacts;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                return [];
-            }
+            Debug.WriteLine(ex);
+            return await Task.FromResult(false);
         }
-                       
-        public async Task<bool> UpdateContactAsync(Contact contact)
+    }
+
+    public async Task<bool> DeleteContactByEmailAsync(string email)
+    {
+        try
         {
-            try
+            var contactToRemove = _contacts.FirstOrDefault(c => c.Email == email);
+            if (contactToRemove != null)
             {
-                var existingContact = _contacts.FirstOrDefault(c => c.Id == contact.Id);
-                if (existingContact != null)
-                {
-                    existingContact.FirstName = contact.FirstName;
-                    existingContact.LastName = contact.LastName;
-                    existingContact.Email = contact.Email;
-                    existingContact.PhoneNumber = contact.PhoneNumber;
-                    existingContact.Address = contact.Address;
-                }
+                _contacts.Remove(contactToRemove);
                 _fileService.WriteToJsonFile(_contacts, filePath);
-                return await Task.FromResult(true);
+            }
 
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return await Task.FromResult(false);
-            }
+            return await Task.FromResult(true);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return await Task.FromResult(false);
         }
 
-        public async Task<bool> DeleteContactByEmailAsync(string email)
+    }
+
+    public async Task<IEnumerable<Contact>> GetAllContactsFromFileToList()
+    {
+        try
         {
-            try
+            if (_fileService.ReadFromJsonFile(filePath) is IEnumerable<Contact> contactsFromFile)
             {
-                var contactToRemove = _contacts.FirstOrDefault(c => c.Email == email);
-                if (contactToRemove != null)
-                {
-                    _contacts.Remove(contactToRemove);
-                    _fileService.WriteToJsonFile(_contacts, filePath);
-                }
-
-                return await Task.FromResult(true);
+                _contacts.AddRange(contactsFromFile);
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine(ex.Message);
-                return await Task.FromResult(false);
+                Debug.WriteLine("Error: Unable to read contacts from the file.");
             }
 
+            await Task.Yield();
+            return _contacts;
         }
-
-        public async Task<IEnumerable<Contact>> GetAllContactsFromFileToList()
+        catch (Exception ex)
         {
-            try
-            {
-                if (_fileService.ReadFromJsonFile(filePath) is IEnumerable<Contact> contactsFromFile)
-                {
-                    _contacts.AddRange(contactsFromFile);
-                }
-                else
-                {
-                    Debug.WriteLine("Error: Unable to read contacts from the file.");
-                }
-
-                await Task.Yield();
-                return _contacts;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Exception occurred: {ex}");
-                return Enumerable.Empty<Contact>();
-            }
+            Debug.WriteLine($"Exception occurred: {ex}");
+            return Enumerable.Empty<Contact>();
         }
     }
 }

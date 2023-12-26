@@ -46,7 +46,7 @@ public partial class ContactListViewModel : ObservableObject
     public void NavigateToUpdateContact() => NavigateToViewModel<ContactUpdateViewModel>();
 
     [RelayCommand]
-    private async Task DeleteContact()
+    public async Task DeleteContact()
     {
         if (SelectedContact != null)
         {

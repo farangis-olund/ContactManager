@@ -9,38 +9,31 @@ namespace AddressBookWpfApp.Tests;
 
 public class ContactListViewModel_Test
 {
+
     [Fact]
-    public async Task AddContactToList_WhenValidContactInfo_AddsContactToList()
+    public async Task DeleteContact_WhenSelectedContactNotNull_DeletesContactAndReloadsContacts()
     {
         // Arrange
-        var contactServiceMock = new Mock<IContactService>();
         var serviceProviderMock = new Mock<IServiceProvider>();
+        var contactServiceMock = new Mock<IContactService>();
 
-        var contactList = new ObservableCollection<Contact>();
+        var selectedContact = new Contact { Email = "elsa@example.com" };
+        var contactList = new ObservableCollection<Contact>
+            {
+                new() { Email = "elsa@example.com" },
+                new() { Email = "another@example.com" }
+            };
 
-        var viewModel = new ContactAddViewModel(serviceProviderMock.Object, contactServiceMock.Object, contactList);
-
-        viewModel.Contact.FirstName = "Elsa";
-        viewModel.Contact.LastName = "Olund";
-        viewModel.Contact.Email = "elsa@example.com";
-
-        // Set up mock behavior for AddContactAsync
-        contactServiceMock.Setup(x => x.AddContactAsync(It.IsAny<Contact>()))
-                          .ReturnsAsync(true)
-                          .Verifiable();
-
-        // Set up mock behavior for GetAllContactsAsync
-        contactServiceMock.Setup(x => x.GetAllContactsAsync())
-                          .ReturnsAsync(new List<Contact>()) 
-                          .Verifiable();
+        var viewModel = new ContactListViewModel(serviceProviderMock.Object, contactServiceMock.Object, selectedContact, contactList);
+        
+        contactServiceMock.Setup(x => x.DeleteContactByEmailAsync(selectedContact.Email)).ReturnsAsync(true);
 
         // Act
-        await viewModel.AddContactToList();
+        await viewModel.DeleteContact();
 
         // Assert
-        contactServiceMock.Verify(x => x.AddContactAsync(It.IsAny<Contact>()), Times.Once);
-        contactServiceMock.Verify(x => x.GetAllContactsAsync(), Times.Once);
-
+        contactServiceMock.Verify(x => x.DeleteContactByEmailAsync(selectedContact.Email), Times.Once);
+        Assert.Empty(viewModel.ContactList); 
     }
 
     [Fact]

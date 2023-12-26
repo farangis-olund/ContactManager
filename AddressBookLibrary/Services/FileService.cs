@@ -32,14 +32,10 @@ namespace AddressBookLibrary.Services
         {
             try
             {
-                // Serialize the updated list
                 string jsonDataToWrite = JsonConvert.SerializeObject(data);
 
-                // Write the updated data back to the file
-                using (var sw = new StreamWriter(filePath))
-                {
-                    sw.Write(jsonDataToWrite);
-                }
+                using var sw = new StreamWriter(filePath);
+                sw.Write(jsonDataToWrite);
                 return true;
             }
             catch (Exception ex)
