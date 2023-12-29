@@ -12,8 +12,6 @@ public class ServiceConfigurator
            Host.CreateDefaultBuilder(args)
                .ConfigureServices((hostContext, services) =>
                {
-                   // Registering Services and its dependencies
-                  
                    services.AddSingleton<IFileService, FileService>();
                    services.AddSingleton<Contact>();
                    services.AddSingleton<IContactService, ContactService>();

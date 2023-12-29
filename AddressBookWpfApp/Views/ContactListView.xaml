@@ -34,16 +34,14 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <!-- First Column -->
                         <StackPanel Grid.Column="0" >
-                            <!-- First Name -->
+                            
                             <StackPanel Grid.Column="0" Orientation="Horizontal">
                                 <TextBlock Text="{Binding FirstName}" FontWeight="Bold" FontSize="14"/>
                                 <TextBlock Text=" "/>
                                 <TextBlock Text="{Binding LastName}" FontWeight="Bold" FontSize="14"/>
                             </StackPanel>
  
-                            <!-- Email  -->
                             <StackPanel Grid.Column="1" Margin="0,5,0,0" Orientation="Horizontal">
                                   <TextBlock Text="{Binding Email}" />
                             </StackPanel>

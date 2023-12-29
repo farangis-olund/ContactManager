@@ -21,19 +21,19 @@
         <StackPanel Grid.Row="1" Margin="0,0,0,20">
 
             <Label Content="UPDATE CONTACT" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold"/>
-            <Label Content="First Name"/>
+            <Label Content="First Name" Foreground="Gray"/>
             <TextBox Text="{Binding SelectedContact.FirstName}" Padding="2,5"/>
 
-            <Label Content="Last Name"/>
+            <Label Content="Last Name" Foreground="Gray"/>
             <TextBox Text="{Binding SelectedContact.LastName}" Padding="2,5"/>
 
-            <Label Content="Email"/>
+            <Label Content="Email" Foreground="Gray"/>
             <TextBox Text="{Binding SelectedContact.Email}" Padding="2,5"/>
 
-            <Label Content="Telphone number"/>
+            <Label Content="Telphone number" Foreground="Gray"/>
             <TextBox Text="{Binding SelectedContact.PhoneNumber}" Padding="2,5"/>
 
-            <Label Content="Address"/>
+            <Label Content="Address" Foreground="Gray"/>
             <TextBox Text="{Binding SelectedContact.Address}" Padding="2,5"/>
             
             <Button Content="Update" Command="{Binding UpdateContactCommand}" Padding="5,8" Margin="0,15,0,5"/>
